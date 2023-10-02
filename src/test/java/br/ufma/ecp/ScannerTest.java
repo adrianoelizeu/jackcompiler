@@ -10,10 +10,7 @@ import org.junit.Test;
 import br.ufma.ecp.token.Token;
 import br.ufma.ecp.token.TokenType;
 
-
-
 public class ScannerTest extends TestSupport {
-
 
     @Test
     public void testSimple () {
@@ -23,12 +20,11 @@ public class ScannerTest extends TestSupport {
             System.out.println(tk);
         }
     }
-    
+
     @Test
     public void testScannerWithSquareGame() throws IOException {
         var input = fromFile("Square/SquareGame.jack");
         var expectedResult =  fromFile("Square/SquareGameT.xml");
-
         var scanner = new Scanner(input.getBytes(StandardCharsets.UTF_8));
         var result = new StringBuilder();
         
@@ -39,16 +35,13 @@ public class ScannerTest extends TestSupport {
         }
 
         result.append("</tokens>\r\n");
-        
         assertEquals(expectedResult, result.toString());
     }
-
 
     @Test
     public void testScannerWithSquare() throws IOException {
         var input = fromFile("Square/Square.jack");
         var expectedResult =  fromFile("Square/SquareT.xml");
-
         var scanner = new Scanner(input.getBytes(StandardCharsets.UTF_8));
         var result = new StringBuilder();
         
@@ -62,7 +55,4 @@ public class ScannerTest extends TestSupport {
         System.out.println(result.toString());
         assertEquals(expectedResult, result.toString());
     }
-
-    
-    
 }

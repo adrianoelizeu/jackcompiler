@@ -1,46 +1,48 @@
 package br.ufma.ecp.token;
 
 import java.util.List;
-import java.util.Map;
+//import java.util.Map; --não utilizado
 
 public enum TokenType {
-    PLUS,MINUS,
+    // Literals.
+    NUMBER,
+    IDENT,
+    STRING,
 
-     // Literals.
-     NUMBER,
-     STRING,
+    // keywords
+    METHOD, WHILE, IF, CLASS, CONSTRUCTOR,
+    FUNCTION, FIELD, STATIC, VAR, INT,
+    CHAR, BOOLEAN, VOID, TRUE, FALSE,
+    NULL, THIS, LET, DO, ELSE, RETURN,
 
+    // symbols
+    LPAREN, RPAREN,
+    LBRACE, RBRACE,
+    LBRACKET, RBRACKET,
 
-     IDENT,
+    COMMA, SEMICOLON, DOT,
 
- 
-     // keywords
-     METHOD,
-     WHILE,
-     IF,
-     CLASS,
-     CONSTRUCTOR,
+    PLUS, MINUS, ASTERISK, SLASH,
 
-     EOF,
+    AND, OR, NOT,
 
-     ILLEGAL;
+    LT, GT, EQ,
 
-     static public boolean isSymbol (char c) {
+    EOF,
+
+    ILLEGAL;
+
+    static public boolean isSymbol(char c) {
         String symbols = "{}()[].,;+-*/&|<>=~";
         return symbols.indexOf(c) > -1;
     }
 
-
-    static public boolean isKeyword (TokenType type) {
-        List<TokenType> keywords  = 
-            List.of(
-                METHOD,
-                WHILE,
-                IF,
-                CLASS,
-                CONSTRUCTOR
-            );
-            return keywords.contains(type);
+    static public boolean isKeyword(TokenType type) {
+        List<TokenType> keywords = List.of(
+            METHOD, WHILE, IF, CLASS, CONSTRUCTOR,
+            FUNCTION, FIELD, STATIC, VAR, INT,
+            CHAR, BOOLEAN, VOID, TRUE, FALSE,
+            NULL, THIS, LET, DO, ELSE, RETURN);
+        return keywords.contains(type);
     }
-
 }
