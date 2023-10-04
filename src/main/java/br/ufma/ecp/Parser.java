@@ -3,6 +3,7 @@ package br.ufma.ecp;
 import br.ufma.ecp.token.Token;
 import br.ufma.ecp.token.TokenType;
 
+
 public class Parser {
     private Scanner scan;
     private Token currentToken;
