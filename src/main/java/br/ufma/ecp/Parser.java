@@ -5,44 +5,47 @@ import br.ufma.ecp.token.TokenType;
 
 public class Parser {
 
-    private static class ParseError extends RuntimeException {}
+   private static class ParseError extends RuntimeException {}
+
     private Scanner scan;
     private Token currentToken;
     private Token peekToken;
     private StringBuilder xmlOutput = new StringBuilder();
 
-    public Parser (byte[] input) {
+    public Parser(byte[] input) {
         scan = new Scanner(input);
-        nextToken();        
+        nextToken();
     }
 
-    public void nextToken () {
+    private void nextToken() {
         currentToken = peekToken;
-        peekToken = scan.nextToken();        
+        peekToken = scan.nextToken();
     }
 
-    public void parse () {
+
+   public void parse () {
         
     }
 
-    // Aux Functions
-    public String XMLOutput () {
+    // funções auxiliares
+    public String XMLOutput() {
         return xmlOutput.toString();
     }
 
-    private void printNonTerminal (String nterminal) {
+    private void printNonTerminal(String nterminal) {
         xmlOutput.append(String.format("<%s>\r\n", nterminal));
     }
 
-    boolean peekTokenIs (TokenType type) {
+
+    boolean peekTokenIs(TokenType type) {
         return peekToken.type == type;
     }
 
-    boolean currentTokenIs (TokenType type) {
+    boolean currentTokenIs(TokenType type) {
         return currentToken.type == type;
     }
 
-    private void expectPeek (TokenType... types) {
+    private void expectPeek(TokenType... types) {
         for (TokenType type : types) {
             if (peekToken.type == type) {
                 expectPeek(type);
@@ -54,7 +57,7 @@ public class Parser {
 
     }
 
-    private void expectPeek (TokenType type) {
+    private void expectPeek(TokenType type) {
         if (peekToken.type == type) {
             nextToken();
             xmlOutput.append(String.format("%s\r\n", currentToken.toString()));
@@ -63,12 +66,15 @@ public class Parser {
         }
     }
 
-    private static void report (int line, String where, String message) {
+
+    private static void report(int line, String where,
+        String message) {
             System.err.println(
             "[line " + line + "] Error" + where + ": " + message);
     }
 
-    private ParseError error (Token token, String message) {
+
+    private ParseError error(Token token, String message) {
         if (token.type == TokenType.EOF) {
             report(token.line, " at end", message);
         } else {
@@ -77,7 +83,6 @@ public class Parser {
         return new ParseError();
     }
 
-    // New
     void parseTerm() {
         printNonTerminal("term");
         switch (peekToken.type) {
@@ -104,48 +109,18 @@ public class Parser {
     
         printNonTerminal("/term");
       }
-      
 
-    // Old  
-    void expr () {
-        number();
-        oper();
-    }
-
-    void number () {
-        System.out.println(currentToken.lexeme);
-        match(TokenType.NUMBER);
-    }
-
-
-   private void match(TokenType t) {
-        if (currentToken.type == t) {
-            nextToken();
-        }else {
-            throw new Error("syntax error");
+        static public boolean isOperator(String op) {
+            return "+-*/<>=~&|".contains(op);
         }
-   }
 
-    void oper () {
-        if (currentToken.type == TokenType.PLUS) {
-            match(TokenType.PLUS);
-            number();
-            System.out.println("add");
-            oper();
-        } else if (currentToken.type == TokenType.MINUS) {
-            match(TokenType.MINUS);
-            number();
-            System.out.println("sub");
-            oper();
-        } else if (currentToken.type == TokenType.EOF) {
-            // vazio
-        } else {
-            throw new Error("syntax error");
+        void parseExpression() {
+            printNonTerminal("expression");
+            parseTerm ();
+            while (isOperator(peekToken.lexeme)) {
+                expectPeek(peekToken.type);
+                parseTerm();
+            }
+            printNonTerminal("/expression");
         }
-    }
-
-    public String VMOutput() {
-        return "";
-    }
-
 }

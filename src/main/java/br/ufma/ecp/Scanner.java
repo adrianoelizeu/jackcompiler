@@ -21,6 +21,9 @@ public class Scanner {
 
     static {
         keywords = new HashMap<>();
+        keywords.put("method",    TokenType.METHOD);
+        keywords.put("while",  TokenType.WHILE);
+        keywords.put("if",   TokenType.IF);
         keywords.put("while", TokenType.WHILE);
         keywords.put("int", TokenType.INT);
         keywords.put("class", TokenType.CLASS);
@@ -42,7 +45,7 @@ public class Scanner {
         keywords.put("if", TokenType.IF);
         keywords.put("else", TokenType.ELSE);
         keywords.put("return", TokenType.RETURN);
-  }
+    }
 
     
     public Scanner (byte[] input) {
@@ -51,55 +54,52 @@ public class Scanner {
         start = 0;
     }
 
+
     private void skipBlockComments() {
         boolean endComment = false;
         advance();
+    
         while (!endComment) {
-            advance();
-            char ch = peek();
-            if (ch == '\n')
-                line++;
-            if ( ch == 0) { // eof, lexical error
-                System.exit(1);
+          advance();
+          char ch = peek();
+    
+          if (ch == '\n')
+              line++;
+    
+          if (ch == 0) { // eof, lexical error
+            System.exit(1);
+          }
+    
+          if (ch == '*') {
+            for (ch = peek(); ch == '*'; advance(), ch = peek())
+              ;
+            if (ch == '/') {
+              endComment = true;
+              advance();
             }
-         
-            if (ch == '*') {
-               for (ch = peek(); ch == '*';  advance(), ch = peek()) ;
-                if (ch == '/') {
-                    endComment = true;
-                    advance();
-                }
-            }
-
+          }
+    
         }
-    }
-
+      }
+    
     private void skipLineComments() {
-        for (char ch = peek(); ch != '\n' && ch != 0; advance(), ch = peek())
-            if (ch == '\n')
-                line++;
-    }
-
+    
+            for (char ch = peek(); ch != '\n' && ch != 0; advance(), ch = peek())
+                if (ch == '\n')
+                    line++;
+        }
+    
     private void skipWhitespace() {
-        char ch = peek();
-        while (ch == ' ' || ch == '\r' || ch == '\t' || ch == '\n') {
-
-            if (ch == '\n')
-                line++;
-
-            advance();
-            ch = peek();
-        }
+            char ch = peek();
+            while (ch == ' ' || ch == '\r' || ch == '\t' || ch == '\n') {
+    
+                if (ch == '\n')
+                    line++;
+    
+                advance();
+                ch = peek();
+            }
     }
-
-    private char peekNext () {
-        int next = current + 1;
-        if ( next  < input.length) {
-            return (char)input[next];
-        } else {
-            return 0;
-        }
-   }
 
     public Token nextToken () {
 
@@ -118,12 +118,30 @@ public class Scanner {
 
         switch (ch) {
 
+            case '/':
+                if (peekNext() == '/') {
+                    skipLineComments();
+                    return nextToken();
+                } else if (peekNext() == '*') {
+                    skipBlockComments();
+                    return nextToken();
+                }
+                else {
+                    advance();
+                    return new Token (TokenType.SLASH,"/", line);
+                }
+            case '+':
+                advance();
+                return new Token (TokenType.PLUS,"+", line);
+            case '-':
+                advance();
+                return new Token (TokenType.MINUS,"-", line); 
             case '*':
                 advance();
                 return new Token (TokenType.ASTERISK,"*", line); 
             case '.':
                 advance();
-                return new Token (TokenType.DOT,".", line); 
+                return new Token (TokenType.DOT,".",line); 
             case '&':
                 advance();
                 return new Token (TokenType.AND,"&", line); 
@@ -133,7 +151,6 @@ public class Scanner {
             case '~':
                 advance();
                 return new Token (TokenType.NOT,"~", line); 
-
             case '>':
                 advance();
                 return new Token (TokenType.GT,">", line); 
@@ -167,31 +184,16 @@ public class Scanner {
             case ',':
                 advance();
                 return new Token (TokenType.COMMA,",", line);
-            case '+':
-                advance();
-                return new Token(TokenType.PLUS, "+", line);
-            case '-':
-                advance();
-                return new Token (MINUS,"-", line);
-            case '/':
-                if (peekNext() == '/') {
-                    skipLineComments();
-                    return nextToken();
-                } else if (peekNext() == '*') {
-                    skipBlockComments();
-                    return nextToken();
-                }
-                else {
-                    advance();
-                    return new Token (TokenType.SLASH,"/", line);
-                }
             case '"':
                 return string();
             case 0:
                 return new Token (EOF,"EOF", line);
             default:
                 advance();
+            
                 return new Token(ILLEGAL, Character.toString(ch), line);
+
+                
         }
     }
 
@@ -223,7 +225,7 @@ public class Scanner {
         Token token = new Token (TokenType.STRING,s, line);
         advance();
         return token;
- }
+    }
 
     private void advance()  {
         char ch = peek();
@@ -243,9 +245,19 @@ public class Scanner {
       }
     
 
-      private char peek () {
+    private char peek () {
         if (current < input.length)
            return (char)input[current];
        return 0;
     }
+
+    private char peekNext () {
+        int next = current + 1;
+        if ( next  < input.length) {
+            return (char)input[next];
+        } else {
+            return 0;
+        }
+   }
+    
 }

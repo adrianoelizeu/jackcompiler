@@ -4,64 +4,63 @@ import java.util.List;
 import java.util.Map;
 
 public enum TokenType {
-    
-    // symbols
-    LPAREN,RPAREN,
-    LBRACE, RBRACE,
-    LBRACKET,RBRACKET,
+    PLUS,MINUS, EQ, SEMICOLON,ASTERISK, SLASH,COMMA,DOT,
 
-    COMMA, SEMICOLON, DOT,
-  
-    PLUS,  MINUS,ASTERISK, SLASH,
+     // Literals.
+     NUMBER,
+     STRING,
+     IDENT,
+ 
+     // keywords
+     METHOD,
+     WHILE,
+     IF,
+     CLASS,
+     CONSTRUCTOR,
+     FUNCTION,
+     FIELD,
+     STATIC,
+     VAR,
+     INT,
+     CHAR,
+     BOOLEAN,
+     VOID,
+     TRUE,
+     FALSE,
+     NULL,
+     THIS,
+     LET,
+     DO,
+     ELSE,
+     RETURN,
+     EOF,
+     ILLEGAL,
 
-    AND, OR, NOT,
+     // symbols
+     LPAREN,RPAREN,
+     LBRACE, RBRACE,
+     LBRACKET,RBRACKET,
 
-    LT, GT, EQ,
+     AND, OR, NOT,
 
-    // Literals.
-    NUMBER,
-    STRING,
-    IDENT,
+     LT, GT;
 
-    // keywords
-    METHOD,
-    WHILE,
-    IF,
-    CLASS,
-    CONSTRUCTOR,
-    FUNCTION,
-    FIELD,
-    STATIC,
-    VAR,
-    INT,
-    CHAR,
-    BOOLEAN,
-    VOID,
-    TRUE,
-    FALSE,
-    NULL,
-    THIS,
-    LET,
-    DO,
-    ELSE,
-    RETURN,
-
-    EOF,
-
-    ILLEGAL;
-
-    static public boolean isSymbol(char c) {
+     static public boolean isSymbol (char c) {
         String symbols = "{}()[].,;+-*/&|<>=~";
         return symbols.indexOf(c) > -1;
     }
 
-    static public boolean isKeyword(TokenType type) {
-        List<TokenType> keywords = List.of(
-            WHILE, CLASS,CONSTRUCTOR,FUNCTION,
-            METHOD,FIELD,STATIC,VAR,INT,
-            CHAR,BOOLEAN,VOID,TRUE,FALSE,
-            NULL,THIS,LET,DO,IF,ELSE,RETURN);
-        return keywords.contains(type);
+
+    static public boolean isKeyword (TokenType type) {
+        List<TokenType> keywords  = 
+            List.of(
+                METHOD,
+                WHILE,
+                IF,
+                CLASS,
+                CONSTRUCTOR
+            );
+            return keywords.contains(type);
     }
 
 }
