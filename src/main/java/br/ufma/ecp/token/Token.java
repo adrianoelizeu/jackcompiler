@@ -41,5 +41,9 @@ public class Token {
   
 
     }
+
+    public String value() {
+        return null;
+    }
     
 }
