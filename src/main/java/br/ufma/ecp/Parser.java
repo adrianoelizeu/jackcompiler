@@ -283,9 +283,42 @@ public class Parser {
         printNonTerminal("/statements");
     }
 
-    private void parseStatement() {
+    void parseStatement() {
+        switch (peekToken.type) {
+            case LET:
+                parseLet();
+                break;
+            case WHILE:
+                parseWhile();
+                break;
+            case IF:
+                parseIf();
+                break;
+            case RETURN:
+                parseReturn();
+                break;
+            case DO:
+                parseDo();
+                break;
+            default:
+                throw error(peekToken, "Expected a statement");
+        }
     }
 
+    private void parseDo() {
+    }
+
+    private void parseReturn() {
+    }
+
+    private void parseIf() {
+    }
+
+    private void parseWhile() {
+    }
+
+    private void parseLet() {
+    }
 
 
 }
