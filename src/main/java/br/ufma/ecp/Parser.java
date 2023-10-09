@@ -305,19 +305,80 @@ public class Parser {
         }
     }
 
-    private void parseDo() {
+    public void parseLet() {
+        printNonTerminal("letStatement");
+        expectPeek(TokenType.LET);
+        expectPeek(TokenType.IDENT);
+
+        if (peekTokenIs(TokenType.LBRACKET)) {
+            expectPeek(TokenType.LBRACKET);
+            parseExpression();
+            expectPeek(TokenType.RBRACKET);
+        }
+
+        expectPeek(TokenType.EQ);
+        parseExpression();
+        expectPeek(TokenType.SEMICOLON);
+        printNonTerminal("/letStatement");
     }
 
-    private void parseReturn() {
+    public void parseWhile() {
+        printNonTerminal("whileStatement");
+        expectPeek(TokenType.WHILE);
+        expectPeek(TokenType.LPAREN);
+        parseExpression();
+        expectPeek(TokenType.RPAREN);
+        expectPeek(TokenType.LBRACE);
+        parseStatements();
+        expectPeek(TokenType.RBRACE);
+        printNonTerminal("/whileStatement");
     }
 
-    private void parseIf() {
+    public void parseIf() {
+        printNonTerminal("ifStatement");
+        expectPeek(TokenType.IF);
+
+        expectPeek(TokenType.LPAREN);
+        parseExpression();
+        expectPeek(TokenType.RPAREN);
+
+        expectPeek(TokenType.LBRACE);
+        parseStatements();
+        expectPeek(TokenType.RBRACE);
+
+        if (peekTokenIs(TokenType.ELSE)) {
+            expectPeek(TokenType.ELSE);
+            expectPeek(TokenType.LBRACE);
+            parseStatements();
+            expectPeek(TokenType.RBRACE);
+        }
+        printNonTerminal("/ifStatement");
     }
 
-    private void parseWhile() {
+    public void parseReturn() {
+        printNonTerminal("returnStatement");
+        expectPeek(TokenType.RETURN);
+        if (!peekTokenIs(TokenType.SEMICOLON)) {
+            parseExpression();
+        }
+        expectPeek(TokenType.SEMICOLON);
+        printNonTerminal("/returnStatement");
     }
 
-    private void parseLet() {
+    public void parseDo() {
+        printNonTerminal("doStatement");
+        expectPeek(TokenType.DO);
+        expectPeek(TokenType.IDENT);
+        parseSubroutineCall();
+        expectPeek(TokenType.SEMICOLON);
+
+        printNonTerminal("/doStatement");
+    }
+
+    private void parseExpression() {
+    }
+
+    private void parseSubroutineCall() {
     }
 
 
