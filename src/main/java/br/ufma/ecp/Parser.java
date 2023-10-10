@@ -375,11 +375,50 @@ public class Parser {
         printNonTerminal("/doStatement");
     }
 
-    private void parseExpression() {
+    public void parseSubroutineCall() {
+        if (peekTokenIs(TokenType.LPAREN)) {
+            expectPeek(TokenType.LPAREN);
+            parseExpressionList();
+            expectPeek(TokenType.RPAREN);
+
+        } else {
+            expectPeek(TokenType.DOT);
+            expectPeek(TokenType.IDENT);
+
+            expectPeek(TokenType.LPAREN);
+            parseExpressionList();
+            expectPeek(TokenType.RPAREN);
+        }
     }
 
-    private void parseSubroutineCall() {
+    int parseExpressionList() {
+        printNonTerminal("expressionList");
+
+        var nArgs = 0;
+
+        if (!peekTokenIs(TokenType.RPAREN)) 
+        {
+            parseExpression();
+            nArgs = 1;
+        }
+
+        while (peekTokenIs(TokenType.COMMA)) {
+            expectPeek(TokenType.COMMA);
+            parseExpression();
+            nArgs++;
+        }
+        printNonTerminal("/expressionList");
+        return nArgs;
     }
 
+    public void parseExpression() {
+        printNonTerminal("expression");
+        parseTerm ();
+        while (isOperator(peekToken.lexeme)) {
+            expectPeek(peekToken.type);
+            parseTerm();
+        }
+        printNonTerminal("/expression");
+  }
 
 }
