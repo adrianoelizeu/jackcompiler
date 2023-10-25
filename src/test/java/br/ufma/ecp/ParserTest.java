@@ -4,10 +4,10 @@ import java.nio.charset.StandardCharsets;
 
 import static org.junit.Assert.assertEquals;
 
-// import java.io.IOException;
+import java.io.IOException;
 
 import org.junit.Test;
-// import org.junit.experimental.theories.suppliers.TestedOn;
+import org.junit.experimental.theories.suppliers.TestedOn;
 
 public class ParserTest extends TestSupport {
 
@@ -392,7 +392,7 @@ public class ParserTest extends TestSupport {
 
 
 
-  /*
+  
    @Test
    public void testParserWithLessSquareGame() throws IOException {
        var input = fromFile("ExpressionLessSquare/SquareGame.jack");
@@ -429,5 +429,5 @@ public class ParserTest extends TestSupport {
        expectedResult = expectedResult.replaceAll("  ", "");
        assertEquals(expectedResult, result);
    }
-   */
+   
 }
