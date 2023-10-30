@@ -65,7 +65,6 @@ public class SymbolTable {
     }
 
     int varCount(Kind kind) {
-        return countVars.get(kind);
-    }
+        return countVars.get(kind);}
 
 }
