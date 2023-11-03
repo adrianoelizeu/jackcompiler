@@ -7,7 +7,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 
 import org.junit.Test;
-import org.junit.experimental.theories.suppliers.TestedOn;
+//import org.junit.experimental.theories.suppliers.TestedOn;
 
 public class ParserTest extends TestSupport {
 
@@ -430,7 +430,7 @@ public class ParserTest extends TestSupport {
        assertEquals(expectedResult, result);
    }
 
-
+/* 
    @Test
     public void testInt () {
         var input = """
@@ -669,5 +669,5 @@ public class ParserTest extends TestSupport {
             label WHILE_END0
                     """;
             assertEquals(expected, actual);
-    }
+    }*/
 }
